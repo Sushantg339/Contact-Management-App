@@ -1,16 +1,21 @@
 import express from 'express'
 import contactRoutes from './routes/contact.routes.js'
-import cors from 'cors'
 import path from 'path'
 
 const app = express()
+
 app.use(express.json())
-app.use(cors(
-    {origin : 'http://localhost:5173' , withCredentials : false}
-))
 
-app.use(express.static(path.join(path.resolve() , 'public')))
+const __dirname = path.resolve()
 
-app.use('/api/contact',contactRoutes)
+app.use(express.static(path.join(__dirname, '../frontend/dist')))
+
+
+app.use('/api/contact', contactRoutes)
+
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/dist', 'index.html'))
+})
 
 export default app
